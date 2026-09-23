@@ -24,7 +24,7 @@
 #include "usart.h"
 #include "gpio.h"
 
-/* Private includes ----------------------------------------------------------*/
+#include <stdio.h>
 #include <time.h>
 
 #include "kb.h"
@@ -82,9 +82,10 @@ typedef struct {
 
 static void clearDigits(Timer_t* timer) {
     timer->digits[0] = 0;
-    timer->digits[1] = 1;
-    timer->digits[2] = 2;
-    timer->digits[3] = 3;
+    timer->digits[1] = 0;
+    timer->digits[2] = 0;
+    timer->digits[3] = 0;
+    timer->nums = 0;
 }
 
 static void clearTimer(Timer_t* timer) {
@@ -96,21 +97,35 @@ static void clearTimer(Timer_t* timer) {
 
 static void proceedInput(Timer_t* timer) {
     char key = Get_Char();
-    if (key == '\0') return;
-    if (key == '*') {
+    if (key >= '0' && key <= '9') {
+        if (timer->nums < 4) {
+            timer->digits[0] = timer->digits[1];
+            timer->digits[1] = timer->digits[2];
+            timer->digits[2] = timer->digits[3];
+            timer->digits[3] = key - '0';
+            timer->nums++;
+        }
+    } else if (key == '*') {
         clearTimer(timer);
-    }
-    if (key == '#' || timer->nums == 4) {
+    } else if (key == '#') {
         int minutes = timer->digits[0] * 10 + timer->digits[1];
         int seconds = timer->digits[2] * 10 + timer->digits[3];
         if (minutes > 59 || seconds > 59) {
             clearDigits(timer);
             timer->state = STATE_ERROR;
+            timer->last_tick = HAL_GetTick();
+            Buzzer_Set_Freq(N_C3);
+            Buzzer_Set_Volume(BUZZER_VOLUME_MAX);
+            return;
         }
-        timer->total_sec += minutes * 60 + seconds;
+        timer->total_sec = minutes * 60 + seconds;
+        timer->last_tick = HAL_GetTick();
         timer->state = STATE_COUNTDOWN;
+        return;
     }
-    timer->digits[timer->nums++] = key;
+    char time_str[10];
+    sprintf(time_str, "%d%d:%d%d", timer->digits[0], timer->digits[1], timer->digits[2], timer->digits[3]);
+    // drawScreen("SET", time_str);
 }
 
 static void proceedCountDown(Timer_t* timer) {
