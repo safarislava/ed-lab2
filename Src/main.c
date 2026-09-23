@@ -157,7 +157,7 @@ static void proceedCountDown(Timer_t* timer) {
     if (timer->total_sec == 0) {
         timer->state = STATE_ALARM;
         timer->last_tick = now;
-        Buzzer_Set_Freq(N_A5);
+        Buzzer_Set_Freq(N_B5);
         Buzzer_Set_Volume(BUZZER_VOLUME_MAX);
         return;
     }
@@ -169,7 +169,21 @@ static void proceedCountDown(Timer_t* timer) {
 }
 
 static void proceedAlarm(Timer_t* timer) {
-
+    char key = Get_Char();
+    uint32_t now = HAL_GetTick();
+    if (key != '\0') {
+        Buzzer_Set_Volume(BUZZER_VOLUME_MUTE);
+        clearTimer(timer);
+        return;
+    }
+    uint32_t elapsed = now - timer->last_tick;
+    if ((elapsed / 250) % 2 == 0) {
+        Buzzer_Set_Freq(N_A5);
+        Buzzer_Set_Volume(BUZZER_VOLUME_MAX);
+    } else {
+        Buzzer_Set_Volume(BUZZER_VOLUME_MUTE);
+    }
+    drawScreen("Alarm", "00:00");
 }
 
 static void proceedError(Timer_t* timer) {
