@@ -150,7 +150,17 @@ static void proceedAlarm(Timer_t* timer) {
 }
 
 static void proceedError(Timer_t* timer) {
-
+    uint32_t elapsed = HAL_GetTick() - timer->last_tick;
+    if (elapsed > 150) {
+        Buzzer_Set_Volume(BUZZER_VOLUME_MUTE);
+    }
+    char key = Get_Char();
+    if (key != '\0' || elapsed >= 1500) {
+        Buzzer_Set_Volume(BUZZER_VOLUME_MUTE);
+        clearTimer(timer);
+        return;
+    }
+    drawScreen("Error", "MIN > 59 || SEC > 59");
 }
 
 /* USER CODE END 0 */
