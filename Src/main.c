@@ -95,6 +95,19 @@ static void clearTimer(Timer_t* timer) {
     timer->state = STATE_INPUT;
 }
 
+static void drawScreen(const char* header, const char* time_str) {
+    oled_Fill(Black);
+    if (header != NULL) {
+        oled_SetCursor(4, 2);
+        oled_WriteString((char*)header, Font_7x10, White);
+    }
+    if (time_str != NULL) {
+        oled_SetCursor(36, 22);
+        oled_WriteString((char*)time_str, Font_11x18, White);
+    }
+    oled_UpdateScreen();
+}
+
 static void proceedInput(Timer_t* timer) {
     char key = Get_Char();
     if (key >= '0' && key <= '9') {
@@ -125,7 +138,7 @@ static void proceedInput(Timer_t* timer) {
     }
     char time_str[10];
     sprintf(time_str, "%d%d:%d%d", timer->digits[0], timer->digits[1], timer->digits[2], timer->digits[3]);
-    // drawScreen("SET", time_str);
+    drawScreen("SET", time_str);
 }
 
 static void proceedCountDown(Timer_t* timer) {
