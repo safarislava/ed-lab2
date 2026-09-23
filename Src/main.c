@@ -28,10 +28,7 @@
 #include <time.h>
 
 #include "kb.h"
-#include "sdk_uart.h"
-#include "pca9538.h"
 #include "oled.h"
-#include "fonts.h"
 #include "tim.h"
 #include "buzzer.h"
 
