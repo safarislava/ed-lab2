@@ -25,6 +25,8 @@
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
+#include <time.h>
+
 #include "kb.h"
 #include "sdk_uart.h"
 #include "pca9538.h"
@@ -63,6 +65,65 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+enum TimerState_t {
+    STATE_INPUT,
+    STATE_COUNTDOWN,
+    STATE_ALARM,
+    STATE_ERROR
+};
+
+typedef struct {
+    uint8_t digits[4];
+    uint8_t nums;
+    uint32_t total_sec;
+    uint32_t last_tick;
+    enum TimerState_t state;
+} Timer_t;
+
+static void clearDigits(Timer_t* timer) {
+    timer->digits[0] = 0;
+    timer->digits[1] = 1;
+    timer->digits[2] = 2;
+    timer->digits[3] = 3;
+}
+
+static void clearTimer(Timer_t* timer) {
+    clearDigits(timer);
+    timer->total_sec = 0;
+    timer->last_tick = 0;
+    timer->state = STATE_INPUT;
+}
+
+static void proceedInput(Timer_t* timer) {
+    char key = Get_Char();
+    if (key == '\0') return;
+    if (key == '*') {
+        clearTimer(timer);
+    }
+    if (key == '#' || timer->nums == 4) {
+        int minutes = timer->digits[0] * 10 + timer->digits[1];
+        int seconds = timer->digits[2] * 10 + timer->digits[3];
+        if (minutes > 59 || seconds > 59) {
+            clearDigits(timer);
+            timer->state = STATE_ERROR;
+        }
+        timer->total_sec += minutes * 60 + seconds;
+        timer->state = STATE_COUNTDOWN;
+    }
+    timer->digits[timer->nums++] = key;
+}
+
+static void proceedCountDown(Timer_t* timer) {
+
+}
+
+static void proceedAlarm(Timer_t* timer) {
+
+}
+
+static void proceedError(Timer_t* timer) {
+
+}
 
 /* USER CODE END 0 */
 
@@ -101,14 +162,25 @@ int main(void) {
     Buzzer_Init();
     /* USER CODE END 2 */
 
-    /* Infinite loop */
-    /* USER CODE BEGIN WHILE */
-    while (1) {
-        /* USER CODE END WHILE */
+    Timer_t timer;
+    clearTimer(&timer);
 
-        /* USER CODE BEGIN 3 */
+    while (1) {
+        switch (timer.state) {
+            case STATE_INPUT:
+                proceedInput(&timer);
+                break;
+            case STATE_COUNTDOWN:
+                proceedCountDown(&timer);
+                break;
+            case STATE_ALARM:
+                proceedAlarm(&timer);
+                break;
+            case STATE_ERROR:
+                proceedError(&timer);
+                break;
+        }
     }
-    /* USER CODE END 3 */
 }
 
 /**
