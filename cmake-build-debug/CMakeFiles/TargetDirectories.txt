@@ -1,6 +1,0 @@
-/Users/safarislava/Documents/Projects/SDK-1.1M-master/SDK_Keyboard/cmake-build-debug/CMakeFiles/SDK_Keyboard.dir
-/Users/safarislava/Documents/Projects/SDK-1.1M-master/SDK_Keyboard/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/safarislava/Documents/Projects/SDK-1.1M-master/SDK_Keyboard/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/safarislava/Documents/Projects/SDK-1.1M-master/SDK_Keyboard/cmake-build-debug/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir
-/Users/safarislava/Documents/Projects/SDK-1.1M-master/SDK_Keyboard/cmake-build-debug/cmake/stm32cubemx/CMakeFiles/edit_cache.dir
-/Users/safarislava/Documents/Projects/SDK-1.1M-master/SDK_Keyboard/cmake-build-debug/cmake/stm32cubemx/CMakeFiles/rebuild_cache.dir

@@ -1,5 +1,0 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DCMAKE_SYSTEM_NAME=Generic -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY -DCMAKE_C_COMPILER=/opt/homebrew/bin/arm-none-eabi-gcc -DCMAKE_CXX_COMPILER=/opt/homebrew/bin/arm-none-eabi-g++ -DCMAKE_ASM_COMPILER=/opt/homebrew/bin/arm-none-eabi-gcc "-DCMAKE_C_FLAGS=-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard" "-DCMAKE_CXX_FLAGS=-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard" "-DCMAKE_ASM_FLAGS=-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard" -G "Unix Makefiles" -S /Users/safarislava/Documents/Projects/SDK-1.1M-master/SDK_Keyboard -B /Users/safarislava/Documents/Projects/SDK-1.1M-master/SDK_Keyboard/cmake-build-debug
-Build type: Debug
--- Configuring done (0.0s)
--- Generating done (0.0s)
--- Build files have been written to: /Users/safarislava/Documents/Projects/SDK-1.1M-master/SDK_Keyboard/cmake-build-debug
