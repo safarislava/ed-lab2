@@ -25,13 +25,13 @@
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
 #include "kb.h"
 #include "sdk_uart.h"
 #include "pca9538.h"
 #include "oled.h"
 #include "fonts.h"
-/* USER CODE END Includes */
+#include "tim.h"
+#include "buzzer.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
@@ -57,9 +57,7 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void KB_Test( void );
-void OLED_KB( uint8_t OLED_Keys[]);
-void oled_Reset( void );
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -97,22 +95,19 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_USART6_UART_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   oled_Init();
-
+  Buzzer_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  KB_Test();
-	  HAL_Delay(500);
-
   }
   /* USER CODE END 3 */
 }
@@ -160,54 +155,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void KB_Test( void ) {
-	UART_Transmit( (uint8_t*)"KB test start\n" );
-	uint8_t R = 0, C = 0, L = 0, Row[4] = {ROW4, ROW3, ROW2, ROW1}, Key, OldKey, OLED_Keys[12] = {0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x30};
-	oled_Reset();
-	oled_WriteString("From bottom to top", Font_7x10, White);
-	OLED_KB(OLED_Keys);
-	oled_UpdateScreen();
-	for ( int i = 0; i < 4; i++ ) {
-		while( !( R && C && L ) ) {
-			OldKey = Key;
-			Key = Check_Row( Row[i] );
-			if ( Key == 0x01 && Key != OldKey) {
-				UART_Transmit( (uint8_t*)"Right pressed\n" );
-				R = 1;
-				OLED_Keys[2+3*i] = 0x31;
-				OLED_KB(OLED_Keys);
-			} else if ( Key == 0x02 && Key != OldKey) {
-				UART_Transmit( (uint8_t*)"Center pressed\n" );
-				C = 1;
-				OLED_Keys[1+3*i] = 0x31;
-				OLED_KB(OLED_Keys);
-			} else if ( Key == 0x04 && Key != OldKey) {
-				UART_Transmit( (uint8_t*)"Left pressed\n" );
-				L = 1;
-				OLED_Keys[3*i] = 0x31;
-				OLED_KB(OLED_Keys);
-			}
-		}
-		UART_Transmit( (uint8_t*)"Row complete\n" );
-		R = C = L = 0;
-		HAL_Delay(25);
-	}
-	UART_Transmit( (uint8_t*)"KB test complete\n");
-}
-void OLED_KB( uint8_t OLED_Keys[12]) {
-	for (int i = 3; i >= 0; i--) {
-		oled_SetCursor(56, 5+(4-i)*10);
-		for (int j = 0; j < 3; j++) {
-			oled_WriteChar(OLED_Keys[j+3*i], Font_7x10, White);
-		}
-	}
-	oled_UpdateScreen();
-}
-void oled_Reset( void ) {
-	oled_Fill(Black);
-	oled_SetCursor(0, 0);
-	oled_UpdateScreen();
-}
+
 /* USER CODE END 4 */
 
 /**
