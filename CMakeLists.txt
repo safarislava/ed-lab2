@@ -36,12 +36,14 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
-        # Ваши файлы дисплея, клавиатуры и шрифтов:
+        # Ваши файлы дисплея, клавиатуры, зуммера и шрифтов:
+        Src/buzzer.c
         Src/fonts.c
         Src/kb.c
         Src/oled.c
         Src/pca9538.c
         Src/sdk_uart.c
+        Src/tim.c
 )
 
 # Add include paths
