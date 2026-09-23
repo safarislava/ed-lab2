@@ -74,9 +74,26 @@ char Check_Row(uint8_t row) {
 }
 
 char Get_Char(void) {
-    char key = '\0';
-    for (int row = 0; row < 4; row++) {
-        key = Check_Row(row);
+    static char last_key = '\0';
+    uint8_t rows[4] = {ROW1, ROW2, ROW3, ROW4};
+    char current_key = '\0';
+
+    for (int i = 0; i < 4; i++) {
+        char key = Check_Row(rows[i]);
+        if (key != '\0') {
+            current_key = key;
+            break;
+        }
     }
-    return key;
+
+    if (current_key != '\0' && current_key != last_key) {
+        last_key = current_key;
+        HAL_Delay(20);
+        return current_key;
+    }
+    if (current_key == '\0') {
+        last_key = '\0';
+    }
+
+    return '\0';
 }
