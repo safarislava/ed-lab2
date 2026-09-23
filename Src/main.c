@@ -142,7 +142,30 @@ static void proceedInput(Timer_t* timer) {
 }
 
 static void proceedCountDown(Timer_t* timer) {
-
+    char key = Get_Char();
+    if (key == '*') {
+        clearTimer(timer);
+        return;
+    }
+    uint32_t now = HAL_GetTick();
+    if (now - timer->last_tick >= 1000) {
+        timer->last_tick = now;
+        if (timer->total_sec > 0) {
+            timer->total_sec--;
+        }
+    }
+    if (timer->total_sec == 0) {
+        timer->state = STATE_ALARM;
+        timer->last_tick = now;
+        Buzzer_Set_Freq(N_A5);
+        Buzzer_Set_Volume(BUZZER_VOLUME_MAX);
+        return;
+    }
+    char time_str[10];
+    int minutes = (int) (timer->total_sec / 60);
+    int seconds = (int) (timer->total_sec % 60);
+    sprintf(time_str, "%02d:%02d", minutes, seconds);
+    drawScreen("Timer", time_str);
 }
 
 static void proceedAlarm(Timer_t* timer) {
