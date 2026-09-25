@@ -114,6 +114,8 @@ static void proceedInput(Timer_t* timer) {
             timer->digits[2] = timer->digits[3];
             timer->digits[3] = key - '0';
             timer->nums++;
+        } else {
+            clearTimer(timer);
         }
     } else if (key == '*') {
         clearTimer(timer);
@@ -194,7 +196,7 @@ static void proceedError(Timer_t* timer) {
         clearTimer(timer);
         return;
     }
-    drawScreen("Error", "MIN > 59 || SEC > 59");
+    drawScreen("Error", "");
 }
 
 /* USER CODE END 0 */
