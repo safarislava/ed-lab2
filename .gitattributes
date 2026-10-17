@@ -1,5 +1,3 @@
-# Ignore languages in GitHub Linguist statistics
-*.html linguist-detectable=false
-*.htm linguist-detectable=false
-*.ts linguist-detectable=false
-*.tsx linguist-detectable=false
+*.c linguist-detectable=false
+*.h linguist-detectable=false
+*.s linguist-detectable=false
